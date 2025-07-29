@@ -1,70 +1,91 @@
-# Getting Started with Create React App
+# Time Tracking Web App ⏱️
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A web-based time tracking app built using the MERN stack (MongoDB, Express.js, React.js, Node.js). Users can register, manage projects and tasks, track time, and view summaries.
 
-## Available Scripts
+## 🔗 Live Demo
 
-In the project directory, you can run:
+GitHub: https://github.com/abhishektiwary01/time-tracker-app  
+Live App: https://time-tracker-app-ten.vercel.app/
 
-### `npm start`
+## ✨ Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- User registration and login (JWT authentication)
+- Create, edit, and delete projects
+- Add and view tasks for each project
+- Start/stop timer for each task
+- View tracked time per project and task
+- Optional: Daily/weekly summaries (WIP)
+- Optional: PDF invoice generation (planned)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🧱 Tech Stack
 
-### `npm test`
+Frontend:
+- React.js
+- Bootstrap 5
+- Axios
+- React Router DOM
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Backend:
+- Node.js
+- Express.js
+- MongoDB with Mongoose
+- JWT for authentication
+- bcryptjs for password hashing
 
-### `npm run build`
+Deployment:
+- Frontend: Vercel
+- Backend: (self-hosted or Render/Railway etc.)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 📁 Folder Structure
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+client/ (React app)  
+server/ (Express backend)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🚀 How to Run Locally
 
-### `npm run eject`
+1. Clone the repo:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+git clone https://github.com/abhishektiwary01/time-tracker-app.git
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. Install server dependencies:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+cd server  
+npm install
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3. Create a `.env` file inside `server` folder:
 
-## Learn More
+MONGO_URI=your_mongodb_connection_string  
+JWT_SECRET=your_jwt_secret  
+PORT=5000
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+4. Start backend:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+npm run dev
 
-### Code Splitting
+5. Install frontend dependencies:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+cd ../client  
+npm install
 
-### Analyzing the Bundle Size
+6. Start frontend:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+npm start
 
-### Making a Progressive Web App
+Then open http://localhost:3000
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 🧪 Upcoming Features
 
-### Advanced Configuration
+- Weekly/monthly time summary
+- PDF invoice generation
+- User profile section
+- Tags and filters for tasks
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 👨‍💻 Author
 
-### Deployment
+Abhishek Tiwari  
+GitHub: https://github.com/abhishektiwary01  
+LinkedIn: https://www.linkedin.com/in/abhishektiwary01/
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 📃 License
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the MIT License.
