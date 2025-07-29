@@ -1,0 +1,33 @@
+.nav {
+  display: flex;
+  flex-direction: column; /* Stack vertically */
+  align-items: center;
+  width: 15%;
+  height: 700px;
+  margin-top: 20px;
+  background-color: blueviolet;
+  padding-top: 30px;
+}
+
+.button {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Space between buttons */
+}
+
+.button button {
+  width: 150px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: white;
+  color: blueviolet;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button button:hover {
+  background-color: indigo;
+  color: white;
+}
