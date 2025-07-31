@@ -26,7 +26,8 @@ const RegisterPage = () => {
 
   return (
     <div className="container mt-5" style={{ maxWidth: '400px' }}>
-      <h3 className="mb-4">Register</h3>
+      <h2 className="mb-3 text-center">Time Tracking App</h2>
+      <h4 className="mb-4 text-center">Register</h4>
       {error && <div className="alert alert-danger">{error}</div>}
       <form onSubmit={handleRegister}>
         <div className="mb-3">

@@ -6,8 +6,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage.jsx'
 import ProjectPage from './pages/ProjectPage.jsx';
 import TaskPage from './pages/TaskPage.jsx';
-import LoginPage from './pages/LoginPage.jsx';     // ✅ Optional for auth
-import RegisterPage from './pages/RegisterPage.jsx'; // ✅ Optional for auth
+import LoginPage from './pages/LoginPage.jsx';     
+import RegisterPage from './pages/RegisterPage.jsx'; 
 import ProfilePage from './pages/ProfilePage.jsx';
 const App = () => {
   return (

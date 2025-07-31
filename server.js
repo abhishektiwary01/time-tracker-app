@@ -5,7 +5,7 @@ import cors from 'cors';
 
 import projectRoutes from './src/backend/routes/ProjectRoutes.js';
 import taskRoutes from './src/backend/routes/taskRoutes.js';
-import authRoutes from './src/backend/routes/authRoutes.js'; // ✅ User login/register routes
+import authRoutes from './src/backend/routes/authRoutes.js'; 
 
 const app = express();
 const PORT = 5000;

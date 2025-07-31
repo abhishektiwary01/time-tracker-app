@@ -7,8 +7,8 @@ const TaskPage = () => {
   const { projectId } = useParams();
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({ name: '', description: '' });
+  const [editingId, setEditingId] = useState(null);
   const [timerTaskId, setTimerTaskId] = useState(null);
-  const [manualTime, setManualTime] = useState({ taskId: '', startTime: '', endTime: '' });
 
   useEffect(() => {
     fetchTasks();
@@ -23,18 +23,50 @@ const TaskPage = () => {
     }
   };
 
-  const handleAddTask = async () => {
+  const handleAddOrUpdateTask = async () => {
     if (!newTask.name) return alert('Task name is required');
+
     try {
-      const res = await axios.post('http://localhost:5000/api/tasks', {
-        ...newTask,
-        projectId
-      });
-      setTasks([...tasks, res.data]);
+      if (editingId) {
+        const res = await axios.put(`http://localhost:5000/api/tasks/${editingId}`, {
+          ...newTask,
+          projectId
+        });
+        setTasks(tasks.map(task => (task._id === editingId ? res.data : task)));
+        setEditingId(null);
+      } else {
+        const res = await axios.post('http://localhost:5000/api/tasks', {
+          ...newTask,
+          projectId
+        });
+        setTasks([...tasks, res.data]);
+      }
+
       setNewTask({ name: '', description: '' });
     } catch (error) {
-      console.error('Error adding task:', error);
+      console.error('Error saving task:', error);
     }
+  };
+
+  const handleEditTask = (task) => {
+    setNewTask({ name: task.name, description: task.description || '' });
+    setEditingId(task._id);
+  };
+
+  const handleDeleteTask = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this task?')) return;
+
+    try {
+      await axios.delete(`http://localhost:5000/api/tasks/${id}`);
+      setTasks(tasks.filter(task => task._id !== id));
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setNewTask({ name: '', description: '' });
+    setEditingId(null);
   };
 
   const handleStart = async (id) => {
@@ -44,7 +76,7 @@ const TaskPage = () => {
     }
     try {
       const res = await axios.patch(`http://localhost:5000/api/tasks/${id}/start`);
-      setTasks(tasks.map(task => task._id === id ? res.data : task));
+      setTasks(tasks.map(task => (task._id === id ? res.data : task)));
       setTimerTaskId(id);
     } catch (error) {
       console.error('Error starting timer:', error);
@@ -54,34 +86,23 @@ const TaskPage = () => {
   const handleEnd = async (id) => {
     try {
       const res = await axios.patch(`http://localhost:5000/api/tasks/${id}/end`);
-      setTasks(tasks.map(task => task._id === id ? res.data : task));
+      setTasks(tasks.map(task => (task._id === id ? res.data : task)));
       setTimerTaskId(null);
     } catch (error) {
       console.error('Error ending timer:', error);
     }
   };
 
-  const handleManualLog = async () => {
-    const { taskId, startTime, endTime } = manualTime;
-    if (!taskId || !startTime || !endTime) return alert('All manual time fields are required');
-
-    try {
-      const res = await axios.post(`http://localhost:5000/api/timelogs`, {
-        taskId,
-        startTime,
-        endTime
-      });
-      alert('Time log added');
-      setManualTime({ taskId: '', startTime: '', endTime: '' });
-    } catch (error) {
-      console.error('Error logging time manually:', error);
-    }
+  const handleAddDuration = (taskId) => {
+    // You can replace this alert with a modal or prompt to enter duration
+    alert(`Add manual duration for task ID: ${taskId}`);
   };
 
   return (
     <div className="container mt-4">
       <h3>Tasks for Project</h3>
 
+      {/* Add / Edit Task */}
       <div className="row g-2 mb-4">
         <div className="col-md-4">
           <input
@@ -101,50 +122,19 @@ const TaskPage = () => {
             onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
           />
         </div>
-        <div className="col-md-3">
-          <button className="btn btn-primary w-100" onClick={handleAddTask}>
-            Add Task
+        <div className="col-md-3 d-flex gap-2">
+          <button className="btn btn-primary w-100" onClick={handleAddOrUpdateTask}>
+            {editingId ? 'Update Task' : 'Add Task'}
           </button>
+          {editingId && (
+            <button className="btn btn-secondary w-100" onClick={handleCancelEdit}>
+              Cancel
+            </button>
+          )}
         </div>
       </div>
 
-      <div className="mb-4">
-        <h5>Manual Time Entry</h5>
-        <div className="row g-2">
-          <div className="col-md-3">
-            <select
-              className="form-control"
-              value={manualTime.taskId}
-              onChange={(e) => setManualTime({ ...manualTime, taskId: e.target.value })}
-            >
-              <option value="">Select Task</option>
-              {tasks.map((task) => (
-                <option key={task._id} value={task._id}>{task.name}</option>
-              ))}
-            </select>
-          </div>
-          <div className="col-md-3">
-            <input
-              type="datetime-local"
-              className="form-control"
-              value={manualTime.startTime}
-              onChange={(e) => setManualTime({ ...manualTime, startTime: e.target.value })}
-            />
-          </div>
-          <div className="col-md-3">
-            <input
-              type="datetime-local"
-              className="form-control"
-              value={manualTime.endTime}
-              onChange={(e) => setManualTime({ ...manualTime, endTime: e.target.value })}
-            />
-          </div>
-          <div className="col-md-3">
-            <button className="btn btn-secondary w-100" onClick={handleManualLog}>Log Time</button>
-          </div>
-        </div>
-      </div>
-
+      {/* Task Cards */}
       <div className="row">
         {tasks.map((task) => (
           <div key={task._id} className="col-md-4 mb-3">
@@ -156,7 +146,7 @@ const TaskPage = () => {
                   <strong>Start:</strong> {task.startTime ? new Date(task.startTime).toLocaleString() : 'Not started'}<br />
                   <strong>End:</strong> {task.endTime ? new Date(task.endTime).toLocaleString() : 'Not ended'}
                 </p>
-                <div className="d-flex gap-2">
+                <div className="d-flex flex-wrap gap-2 mb-2">
                   <button
                     className="btn btn-outline-success btn-sm"
                     onClick={() => handleStart(task._id)}
@@ -171,6 +161,16 @@ const TaskPage = () => {
                   >
                     End
                   </button>
+                  <button
+                    className="btn btn-outline-secondary btn-sm"
+                    onClick={() => handleAddDuration(task._id)}
+                  >
+                    Add Duration
+                  </button>
+                </div>
+                <div className="d-flex gap-2">
+                  <button className="btn btn-sm btn-warning" onClick={() => handleEditTask(task)}>Edit</button>
+                  <button className="btn btn-sm btn-danger" onClick={() => handleDeleteTask(task._id)}>Delete</button>
                 </div>
               </div>
             </div>

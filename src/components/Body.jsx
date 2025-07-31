@@ -8,7 +8,7 @@ const Body = () => {
     { day: 'Monday', project: 'Project A', task: 'Task 1', time: '2h 10m' },
     { day: 'Monday', project: 'Project B', task: 'Task 2', time: '1h 30m' },
     { day: 'Tuesday', project: 'Project B', task: 'Task 2', time: '2h 5m' },
-    // Add more entries as needed
+    
   ];
 
   const totalByProject = {

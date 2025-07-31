@@ -1,10 +1,10 @@
-// src/backend/routes/ProjectRoutes.js
+// routes/ProjectRoutes.js
 import express from 'express';
 import Project from '../models/Project.js';
 
 const router = express.Router();
 
-// ✅ GET all projects (no auth)
+// GET all projects
 router.get('/', async (req, res) => {
   try {
     const projects = await Project.find();
@@ -14,33 +14,24 @@ router.get('/', async (req, res) => {
   }
 });
 
-// ✅ POST new project (no auth)
+// POST new project
 router.post('/', async (req, res) => {
   const { name, description } = req.body;
 
-  if (!name) return res.status(400).json({ message: 'Project name is required' });
+  if (!name) {
+    return res.status(400).json({ message: 'Project name is required' });
+  }
 
   try {
     const newProject = new Project({ name, description });
     const saved = await newProject.save();
     res.status(201).json(saved);
   } catch (err) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: err.message });
   }
 });
 
-// ✅ DELETE
-router.delete('/:id', async (req, res) => {
-  try {
-    const deleted = await Project.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.status(404).json({ message: 'Not found' });
-    res.json({ message: 'Deleted', project: deleted });
-  } catch (err) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-// ✅ PUT
+// PUT update project
 router.put('/:id', async (req, res) => {
   const { name, description } = req.body;
 
@@ -54,8 +45,19 @@ router.put('/:id', async (req, res) => {
       { name, description },
       { new: true }
     );
-    if (!updated) return res.status(404).json({ message: 'Not found' });
+    if (!updated) return res.status(404).json({ message: 'Project not found' });
     res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// DELETE project
+router.delete('/:id', async (req, res) => {
+  try {
+    const deleted = await Project.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: 'Project not found' });
+    res.json({ message: 'Project deleted', project: deleted });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
